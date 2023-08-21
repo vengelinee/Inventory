@@ -3,33 +3,104 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const PRODUCTS = [
+  { category: "Fruits", price: "$3", stocked: true, name: "Apple" },
+  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+  { category: "Fruits", price: "$2", stocked: true, name: "Passionfruit" },
+  { category: "Fruits", price: "$2", stocked: true, name: "Pineapple" },
+  { category: "Fruits", price: "$2", stocked: true, name: "Lemon" },
+  { category: "Fruits", price: "$2", stocked: false, name: "Avocado" },
+  { category: "Fruits", price: "$4", stocked: true, name: "Kiwi" },
+  { category: "Fruits", price: "$2", stocked: false, name: "Avocado" },
+  { category: "Fruits", price: "$2", stocked: true, name: "Plum" },
+  { category: "Fruits", price: "$8", stocked: true, name: "Watermelon" },
+  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Tomato" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Onion" },
+  { category: "Vegetables", price: "$2", stocked: false, name: "Mushroom" },
+  { category: "Vegetables", price: "$3", stocked: true, name: "Celery" },
+  { category: "Vegetables", price: "$2", stocked: false, name: "Radish" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+];
 
+function ProductCategoryRow({ category }) {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <tr>
+      <th colSpan="2">
+        {category}
+      </th>
+    </tr>
+  );
 }
 
-export default App
+function ProductRow({ product }) {
+  const name = product.stocked ? product.name :
+    <span style={{ color: 'red' }}>
+      {product.name}
+    </span>;
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td>{product.price}</td>
+    </tr>
+  );
+}
+
+function ProductTable({ products }) {
+  const rows = [];
+  let lastCategory = null;
+
+  products.forEach((product) => {
+    if (product.category !== lastCategory) {
+      rows.push(
+        <ProductCategoryRow
+          category={product.category}
+          key={product.category} />
+      );
+    }
+    rows.push(
+      <ProductRow
+        product={product}
+        key={product.name} />
+    );
+    lastCategory = product.category;
+  });
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  );
+}
+
+function SearchBar() {
+  return (
+    <form>
+      <input type="text" class="border border-gray-30 text-m rounded-xl pl-5 p-2.5 w-full" placeholder="Search ..."/> 
+        <br/>
+      <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" class="w-4 h-4"/>
+      <label for="bordered-checkbox-1" class="w-full py-4 ml-2 text-m font-regular">Only show products in stock</label>
+    </form>
+  );
+}
+
+function FilterableProductTable({ products }) {
+  return (
+    <div>
+      <SearchBar />
+      <ProductTable products={products} />
+    </div>
+  );
+}
+
+export default function App() {
+  return <FilterableProductTable products={PRODUCTS} />;
+}
