@@ -84,8 +84,8 @@ function ProductTable({ products }) {
 function SearchBar() {
   return (
     <form>
-      <input type="text" class="border border-gray-30 text-m rounded-xl pl-5 p-2.5 w-full" placeholder="Search ..."/> 
-        <br/>
+      <input type="text" class="border border-gray-30 text-m rounded-xl pl-5 p-2.5 w-full mb-3" placeholder="Search ..."/> 
+        
       <input id="bordered-checkbox-1" type="checkbox" value="" name="bordered-checkbox" class="w-4 h-4"/>
       <label for="bordered-checkbox-1" class="w-full py-4 ml-2 text-m font-regular">Only show products in stock</label>
     </form>
@@ -94,7 +94,7 @@ function SearchBar() {
 
 function FilterableProductTable({ products }) {
   return (
-    <div>
+    <div class="flex w-full flex-col rounded-3xl min-w-450px max-w-lg border-2 border-sky-600 p-10">
       <SearchBar />
       <ProductTable products={products} />
     </div>
@@ -102,5 +102,9 @@ function FilterableProductTable({ products }) {
 }
 
 export default function App() {
-  return <FilterableProductTable products={PRODUCTS} />;
+  return (
+    <div class="flex w-full justify-center ">
+      <FilterableProductTable products={PRODUCTS} />
+    </div>
+  );
 }
