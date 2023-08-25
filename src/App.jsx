@@ -23,7 +23,7 @@ const PRODUCTS = [
   { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
 ];
 
-function ProductCategoryRow({ category }) {
+function ProductCategoryRow({ category }) { // displays the row for a product category
   return (
     <tr>
       <th colSpan="2"> 
@@ -33,13 +33,16 @@ function ProductCategoryRow({ category }) {
   );
 }
 
-function ProductRow({ product }) {
-  const name = product.stocked ? product.name :
-    <span style={{ color: 'red' }}>
+function ProductRow({ product }) { // function creates row for each product name and price
+
+  // if true yung stock ng product, walang mababago sa product name
+  // if false yung product stock, magiging red yung product name
+  const name = product.stocked ? product.name : 
+    <span style={{ color: 'red' }}>  
       {product.name}
     </span>;
 
-  return (
+  return ( // irereturn niya yung final name and price
     <tr class="text-left">
       <td>{name}</td>
       <td>{product.price}</td>
@@ -47,26 +50,29 @@ function ProductRow({ product }) {
   );
 }
 
-function ProductTable({ products, filterText, inStockOnly }) {
+function ProductTable({ products, filterText, inStockOnly }) { 
   const rows = [];
   let lastCategory = null;
 
   products.forEach((product) => {
     if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+      return; // wag pansinin next if statements, so start na ulet sa next product
+    }
+
+    if (inStockOnly && !product.stocked) { 
       return;
     }
 
-    if (inStockOnly && !product.stocked) {
-      return;
-    }
-
-    if (product.category !== lastCategory) {
+    //pag hindi equal yung product category and last category
+    // gagawa ng row
+    if (product.category !== lastCategory) {  
       rows.push(
         <ProductCategoryRow
           category={product.category}
           key={product.category} />
       );
     }
+    
     rows.push(
       <ProductRow
         product={product}
